@@ -6,6 +6,8 @@ challenges are from Udacity course "[SQL for Data Analysis](https://in.udacity.c
 
 **CSV Data** : raw data for **Parch&Posey company** db in csv format. 
 
+**Schema Dump**: schema only dump.
+
 1. Basic SQL
 2. SQL Join
 3. SQL Aggregations
