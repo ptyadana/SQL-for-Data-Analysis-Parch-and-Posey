@@ -7,10 +7,12 @@ SELECT SUM(standard_qty) FROM orders;
 /*Find the total dollar amount of sales using the total_amt_usd in the orders table.*/
 SELECT SUM(total_amt_usd) FROM orders;
 
-/*Find the total amount spent on standard_amt_usd and gloss_amt_usd paper for each order in the orders table. This should give a dollar amount for each order in the table.*/
+/*Find the total amount spent on standard_amt_usd and gloss_amt_usd paper for each order in the orders table. 
+This should give a dollar amount for each order in the table.*/
 SELECT standard_amt_usd + gloss_amt_usd AS total_standard_gloss FROM orders;
 
-/*Find the standard_amt_usd per unit of standard_qty paper. Your solution should use both an aggregation and a mathematical operator.*/
+/*Find the standard_amt_usd per unit of standard_qty paper. Your solution should use both an aggregation 
+and a mathematical operator.*/
 SELECT SUM(standard_amt_usd)/SUM(standard_qty) AS standard_paper_unit_price FROM orders;
 
 
@@ -30,14 +32,19 @@ SELECT occurred_at FROM web_events
 ORDER BY occurred_at DESC
 LIMIT 1;
 
-/*Find the mean (AVERAGE) amount spent per order on each paper type, as well as the mean amount of each paper type purchased per order. Your final answer should have 6 values - one for each paper type for the average number of sales, as well as the average amount.*/
+/*Find the mean (AVERAGE) amount spent per order on each paper type, as well as 
+the mean amount of each paper type purchased per order. 
+Your final answer should have 6 values - one for each paper type for the average number of sales, 
+as well as the average amount.*/
 SELECT AVG(standard_qty) AS avg_standard_qty, AVG(gloss_qty) AS avg_gloss_qty, AVG(poster_qty) AS avg_poster_qty, 
 		AVG(standard_amt_usd) AS avg_standard_amt_usd, AVG(gloss_amt_usd) AS avg_gloss_amt_usd,AVG(poster_amt_usd) AS avg_poster_amt_usd
 FROM orders;
 
 
-/*Via the video, you might be interested in how to calculate the MEDIAN. Though this is more advanced than what we have covered so far try finding - what is the MEDIAN total_usd spent on all orders?*/
-/*Since there are 6912 orders - we want the average of the 3457 and 3456 order amounts when ordered. This is the average of 2483.16 and 2482.55. This gives the median of 2482.855*/
+/*Via the video, you might be interested in how to calculate the MEDIAN. T
+hough this is more advanced than what we have covered so far try finding - what is the MEDIAN total_usd spent on all orders?*/
+/*Since there are 6912 orders - we want the average of the 3457 and 3456 order amounts when ordered. 
+This is the average of 2483.16 and 2482.55. This gives the median of 2482.855*/
 SELECT *
 FROM (SELECT total_amt_usd
       FROM orders
@@ -54,20 +61,23 @@ JOIN accounts ON accounts.id = orders.account_id
 ORDER BY 2
 LIMIT 1;
 
-/*Find the total sales in usd for each account. You should include two columns - the total sales for each company's orders in usd and the company name.*/
+/*Find the total sales in usd for each account. You should include two columns - the total sales for each company's orders in usd 
+and the company name.*/
 SELECT name,SUM(total_amt_usd) AS total_sales
 FROM accounts
 JOIN orders ON accounts.id = orders.account_id
 GROUP BY name;
 
-/*Via what channel did the most recent (latest) web_event occur, which account was associated with this web_event? Your query should return only three values - the date, channel, and account name.*/
+/*Via what channel did the most recent (latest) web_event occur, which account was associated with this web_event? 
+Your query should return only three values - the date, channel, and account name.*/
 SELECT occurred_at, channel, name AS account_name
 FROM web_events
 JOIN accounts ON accounts.id = web_events.account_id
 ORDER BY occurred_at DESC
 LIMIT 1;
 
-/*Find the total number of times each type of channel from the web_events was used. Your final table should have two columns - the channel and the number of times the channel was used.*/
+/*Find the total number of times each type of channel from the web_events was used. 
+Your final table should have two columns - the channel and the number of times the channel was used.*/
 SELECT channel,COUNT(*) AS total_number_of_times
 FROM web_events
 GROUP BY channel
@@ -88,28 +98,33 @@ JOIN accounts ON accounts.id = web_events.account_id
 ORDER BY occurred_at
 LIMIT 1;
 
-/*What was the smallest order placed by each account in terms of total usd. Provide only two columns - the account name and the total usd. Order from smallest dollar amounts to largest.*/
+/*What was the smallest order placed by each account in terms of total usd. 
+Provide only two columns - the account name and the total usd. Order from smallest dollar amounts to largest.*/
 SELECT name,MIN(total_amt_usd) AS smalled_order_amount
 FROM accounts
 JOIN orders ON accounts.id = orders.account_id
 GROUP BY name
 ORDER BY smalled_order_amount;
 
-/*Find the number of sales reps in each region. Your final table should have two columns - the region and the number of sales_reps. Order from fewest reps to most reps.*/
+/*Find the number of sales reps in each region. 
+Your final table should have two columns - the region and the number of sales_reps. Order from fewest reps to most reps.*/
 SELECT region.name AS region_name ,COUNT(*) AS number_of_sales_reps
 FROM region
 JOIN sales_reps ON region.id = sales_reps.region_id
 GROUP BY region_name
 ORDER BY number_of_sales_reps;
 
-/*For each account, determine the average amount of each type of paper they purchased across their orders. Your result should have four columns - one for the account name and one for the average quantity purchased for each of the paper types for each account.*/
+/*For each account, determine the average amount of each type of paper they purchased across their orders. 
+Your result should have four columns - one for the account name and one for the average quantity purchased 
+for each of the paper types for each account.*/
 SELECT accounts.name AS account_name, AVG(standard_qty) AS avg_standard_qty,AVG(gloss_qty) AS avg_gloss_qty,AVG(poster_qty) AS avg_poster_qty
 FROM orders
 JOIN accounts ON accounts.id = orders.account_id
 GROUP BY accounts.id
 ORDER BY account_name;
 
-/*For each account, determine the average amount spent per order on each paper type. Your result should have four columns - one for the account name and one for the average amount spent on each paper type.*/
+/*For each account, determine the average amount spent per order on each paper type. 
+Your result should have four columns - one for the account name and one for the average amount spent on each paper type.*/
 SELECT accounts.name AS account_name, AVG(standard_amt_usd) AS avg_standard_amt_usd,AVG(gloss_amt_usd) AS avg_gloss_amt_usd,AVG(poster_amt_usd) AS avg_poster_amt_usd
 FROM orders
 JOIN accounts ON accounts.id = orders.account_id
@@ -117,7 +132,9 @@ GROUP BY accounts.id
 ORDER BY account_name;
 
 
-/*Determine the number of times a particular channel was used in the web_events table for each sales rep. Your final table should have three columns - the name of the sales rep, the channel, and the number of occurrences. Order your table with the highest number of occurrences first.*/
+/*Determine the number of times a particular channel was used in the web_events table for each sales rep. 
+Your final table should have three columns - the name of the sales rep, the channel, and the number of occurrences. 
+Order your table with the highest number of occurrences first.*/
 SELECT sales_reps.name AS sales_rep_name, channel, COUNT(*) AS total_number_of_channel_usage
 FROM web_events
 JOIN accounts ON accounts.id = web_events.account_id
@@ -126,7 +143,9 @@ GROUP BY sales_rep_name,channel
 ORDER BY total_number_of_channel_usage DESC;
 
 
-/*Determine the number of times a particular channel was used in the web_events table for each region. Your final table should have three columns - the region name, the channel, and the number of occurrences. Order your table with the highest number of occurrences first.*/
+/*Determine the number of times a particular channel was used in the web_events table for each region. 
+Your final table should have three columns - the region name, the channel, and the number of occurrences. 
+Order your table with the highest number of occurrences first.*/
 SELECT region.name AS region_name, channel, COUNT(*) AS total_occurances
 FROM web_events
 JOIN accounts ON accounts.id = web_events.account_id
@@ -247,4 +266,59 @@ SELECT accounts.name, channel, COUNT(*) AS total_usage
 FROM web_events
 JOIN accounts ON accounts.id = web_events.account_id
 GROUP BY accounts.id, channel
-ORDER BY total_usage DESC
+ORDER BY total_usage DESC;
+
+
+/*Find the sales in terms of total dollars for all orders in each year, ordered from greatest to least. 
+Do you notice any trends in the yearly sales totals?*/
+/*Answer: When we look at the yearly totals, you might notice that 2013 and 2017 have much smaller totals than all other years. 
+If we look further at the monthly data, we see that for 2013 and 2017 there is only one month of sales 
+for each of these years (12 for 2013 and 1 for 2017). Therefore, neither of these are evenly represented. 
+Sales have been increasing year over year, with 2016 being the largest sales to date. 
+At this rate, we might expect 2017 to have the largest sales.*/
+SELECT DATE_PART('year',occurred_at) AS sales_year , SUM(total_amt_usd) AS yearly_total_sales
+FROM orders
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
+/*Which month did Parch & Posey have the greatest sales in terms of total dollars? 
+Are all months evenly represented by the dataset?*/
+/*Answer: In order for this to be 'fair', we should remove the sales from 2013 and 2017. 
+For the same reasons as discussed above.
+The greatest sales amounts occur in December (12).
+*/
+SELECT DATE_PART('month',occurred_at) AS sales_year , SUM(total_amt_usd) AS yearly_total_sales
+FROM orders
+WHERE occurred_at BETWEEN '2014-01-01' AND '2017-01-01'
+GROUP BY 1
+ORDER BY 2 DESC;
+
+/*Which year did Parch & Posey have the greatest sales in terms of total number of orders? 
+Are all years evenly represented by the dataset?*/
+/*Answer: 2016 by far has the most amount of orders, 
+but again 2013 and 2017 are not evenly represented to the other years in the dataset.*/
+SELECT DATE_PART('year',occurred_at) AS sales_year , COUNT(*) AS total_number_of_orders
+FROM orders
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
+/*Which month did Parch & Posey have the greatest sales in terms of total number of orders? 
+Are all months evenly represented by the dataset?*/
+SELECT DATE_PART('month',occurred_at) AS sales_month , COUNT(*) AS total_number_of_orders
+FROM orders
+WHERE occurred_at BETWEEN '2014-01-01' AND '2017-01-01'
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
+/*In which month of which year did Walmart spend the most on gloss paper in terms of dollars?*/
+SELECT DATE_TRUNC('month',occurred_at) AS month_of_sale_date,
+	SUM(gloss_amt_usd) AS total_spent
+FROM orders
+JOIN accounts ON accounts.id = orders.account_id
+WHERE accounts.name LIKE 'Walmart'
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 1;
