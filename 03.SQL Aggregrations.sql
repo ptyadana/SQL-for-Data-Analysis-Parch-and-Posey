@@ -161,3 +161,90 @@ JOIN sales_reps ON sales_reps.id = accounts.sales_rep_id
 GROUP BY 1,2
 ORDER BY number_of_accounts;
 
+/*How many of the sales reps have more than 5 accounts that they manage?*/
+SELECT sales_reps.name AS sales_rep_name, COUNT(sales_reps.name) AS number_of_managed_accounts
+FROM sales_reps
+JOIN accounts ON accounts.sales_rep_id = sales_reps.id
+GROUP BY sales_rep_name
+HAVING COUNT(sales_reps.name) > 5
+ORDER BY number_of_managed_accounts DESC;
+
+/*How many accounts have more than 20 orders?*/
+SELECT accounts.name AS account_name, COUNT(*) AS number_of_orders
+FROM accounts
+JOIN orders ON accounts.id = orders.account_id
+GROUP BY accounts.id
+HAVING COUNT(*) > 20
+ORDER BY 1;
+
+/*Which account has the most orders?*/
+SELECT accounts.name AS account_name, COUNT(*) AS number_of_orders
+FROM accounts
+JOIN orders ON accounts.id = orders.account_id
+GROUP BY accounts.id
+ORDER BY number_of_orders DESC;
+
+
+/*Which accounts spent more than 30,000 usd total across all orders?*/
+SELECT accounts.name AS account_name, SUM(total_amt_usd) AS total_amount
+FROM accounts
+JOIN orders ON accounts.id = orders.account_id
+GROUP BY accounts.id
+HAVING SUM(total_amt_usd) > 30000
+ORDER BY total_amount DESC;
+
+/*Which accounts spent less than 1,000 usd total across all orders?*/
+SELECT accounts.name AS account_name, SUM(total_amt_usd) AS total_amount
+FROM accounts
+JOIN orders ON accounts.id = orders.account_id
+GROUP BY accounts.id
+HAVING SUM(total_amt_usd) < 1000
+ORDER BY total_amount;
+
+/*Which account has spent the most with us?*/
+SELECT accounts.name AS account_name, SUM(total_amt_usd) AS total_amount
+FROM accounts
+JOIN orders ON accounts.id = orders.account_id
+GROUP BY accounts.id
+ORDER BY total_amount DESC
+LIMIT 1;
+
+/*Which account has spent the least with us?*/
+SELECT accounts.name AS account_name, SUM(total_amt_usd) AS total_amount
+FROM accounts
+JOIN orders ON accounts.id = orders.account_id
+GROUP BY accounts.id
+ORDER BY total_amount
+LIMIT 1;
+
+/*Which accounts used facebook as a channel to contact customers more than 6 times?*/
+SELECT accounts.name, channel, COUNT(*) AS total_usage
+FROM web_events
+JOIN accounts ON accounts.id = web_events.account_id
+WHERE channel LIKE 'facebook'
+GROUP BY accounts.id, channel
+HAVING COUNT(*) > 6
+ORDER BY total_usage DESC;
+
+/*Which account used facebook most as a channel?*/
+SELECT accounts.name, channel, COUNT(*) AS total_usage
+FROM web_events
+JOIN accounts ON accounts.id = web_events.account_id
+WHERE channel LIKE 'facebook'
+GROUP BY accounts.id, channel
+ORDER BY total_usage DESC
+LIMIT 1;
+
+/*Which channel was most frequently used by most accounts?*/
+SELECT channel, COUNT(*) AS total_usage
+FROM web_events
+GROUP BY channel
+ORDER BY total_usage DESC
+LIMIT 1;
+
+/*Which channel was most frequently used by most accounts? (including account name)*/
+SELECT accounts.name, channel, COUNT(*) AS total_usage
+FROM web_events
+JOIN accounts ON accounts.id = web_events.account_id
+GROUP BY accounts.id, channel
+ORDER BY total_usage DESC
