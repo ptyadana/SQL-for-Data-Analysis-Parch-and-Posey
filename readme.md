@@ -1,6 +1,8 @@
 # SQL for Data Analysis
 Compilation of SQL related projects, notes and challenges by using **PostgreSQL**.
 
+PostgreSQL Tools : **pgAdmin4**
+
 ## Challenges
 challenges are from Udacity course "[SQL for Data Analysis](https://in.udacity.com/course/sql-for-data-analysis--ud198)" by [MODE](https://modeanalytics.com/).
 
